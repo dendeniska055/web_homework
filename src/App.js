@@ -6,6 +6,8 @@ import pic from "./img/pic.jpg"
 import Icon24LikeOutline from '@vkontakte/icons/dist/24/like_outline';
 import Icon24CommentOutline from '@vkontakte/icons/dist/24/comment_outline';
 import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
+import Icon28AddOutline from '@vkontakte/icons/dist/28/add_outline';
+import Icon56AddCircleOutline from '@vkontakte/icons/dist/56/add_circle_outline';
 
 import Icon28UserOutline from '@vkontakte/icons/dist/28/user_outline';
 import Icon28NewsfeedOutline from '@vkontakte/icons/dist/28/newsfeed_outline';
@@ -70,6 +72,37 @@ const Block: FunctionComponent<BlockProps> = ({ user, event, text, time, count_l
       </div>
     </div>)
 }
+
+const Upload_modal = () => (
+  <div className="modal fade" id="upload_modal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title" id="exampleModalLabel">Добавить событие</h5>
+          <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div className="modal-body">
+          <form>
+            <div className="custom-file">
+              <input type="file" className="custom-file-input" id="validatedInputGroupCustomFile" required />
+              <label className="custom-file-label" htmlFor="validatedInputGroupCustomFile">Загрузить фотографию</label>
+            </div>
+            <div class="form-group">
+              <label for="description">Описание</label>
+              <textarea class="form-control" id="description" rows="3"></textarea>
+            </div>
+          </form>
+        </div>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-secondary" data-dismiss="modal">Отмена</button>
+          <button type="button" className="btn btn-primary">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+)
 
 const SignIn = () => (
   <div className="text-center">
@@ -367,6 +400,9 @@ const Home = () => (
       <MomentsCard />
       <MomentsCard />
     </div>
+    <a href="#upload_modal" data-toggle="modal" >
+      <Icon56AddCircleOutline style={{ "font-size": 24, "position": "fixed", "bottom": "80px", "right": "80px" }} />
+    </a>
   </div>
 )
 
@@ -419,6 +455,7 @@ const App = () => {
 
   return (
     <React.Fragment>
+      <Upload_modal />
       <Setings_modal />
       <Header />
       <Main />
