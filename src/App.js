@@ -12,36 +12,39 @@ import Icon28NewsfeedOutline from '@vkontakte/icons/dist/28/newsfeed_outline';
 import Icon28SearchOutline from '@vkontakte/icons/dist/28/search_outline';
 import Icon28LikeOutline from '@vkontakte/icons/dist/28/like_outline';
 
-const SUBSCRIB = "SUBSCRIB";
-const LIKE = "LIKE";
-
 type Users_type = {
   avatar: string,
   username: string
 }
 
-type CardProps = {
+type Moment_type = {
+  pictures: string,
+  url: string
+}
+
+type BlockProps = {
   user: Users_type,
-  event?: string,
+  event?: "SUBSCRIB" | "LIKE",
   text?: string,
   time: string,
   count_likes?: int,
   can_answer?: Boolean,
   level?: int,
+  moment?: Moment_type,
 }
 
-const Block: FunctionComponent<CardProps> = ({ user, event, text, time, count_likes, can_answer, level }, props) => {
+const Block: FunctionComponent<BlockProps> = ({ user, event, text, time, count_likes, can_answer, level, moment }, props) => {
   const like_txt = 'поставил(-а) вашему фото отметку "Нравится".'
   const subscrib_txt = 'подписался(-ась) на вас.'
   const events_txts = {
-    "like_txt": like_txt,
-    "subscrib_txt": subscrib_txt
+    "LIKE": like_txt,
+    "SUBSCRIB": subscrib_txt
   }
 
   var palochki = [];
   if (level)
     for (var i = 0; i < level; i++)
-      palochki.push(<div className="mr-2" >|<br />|<br />|<br />|<br /></div>);
+      palochki.push(<div key={i} className="mr-2" >|<br />|<br />|<br />|<br /></div>);
 
   return (
     <div className="row no-gutters">
@@ -52,74 +55,111 @@ const Block: FunctionComponent<CardProps> = ({ user, event, text, time, count_li
         </div>}
       <div className={`col-10`}>
         <div className="card-body py-0" >
-          <p className="card-text mb-0" ><b>{user.username}</b>{event ? events_txts[event] : text}</p>
+          <p className="card-text mb-0" ><b>{user.username}</b> {event ? events_txts[event] : text}</p>
           <p><small className="text-muted">{time}
             {(count_likes && !event) && <b className="ml-2" >{count_likes} отметок "Нравится"</b>}
             {(can_answer && !event) && <b className="ml-2" >Ответить</b>}
           </small></p>
         </div>
       </div>
-      {/* {props.secondAvatar &&
-        <div className="col-1">
-          <Link to="/user" ><img src={pic} className="card-img ml-2" style={{ width: 40, height: 40 }} alt="" loading="lazy" /></Link>
-        </div>} */}
-      {(event && event == SUBSCRIB) &&
-        <button type="button" class="btn btn-primary btn-sm">Подписаться</button>}
+      <div className="col-1">
+        {moment &&
+          <Link to="/user" ><img src={moment.pictures} className="card-img ml-2" style={{ width: 40, height: 40 }} alt="" loading="lazy" /></Link>}
+        {(event && event === "SUBSCRIB") &&
+          <button type="button" className="btn btn-primary btn-sm">Подписаться</button>}
+      </div>
     </div>)
 }
 
-const Events_like = (props) => (
-  <div className="row no-gutters">
-    <div className="col-1">
-      <img src={pic} className="card-img ml-2" style={{ width: 40, height: 40 }} alt="" loading="lazy" />
-    </div>
-    <div className={`col-10`}>
-      <div className="card-body py-0" >
-        <p className="card-text mb-0" ><b>UserName</b> поставил(-а) вашему фото отметку "Нравится".
-          <small className="text-muted">3 mins ago</small></p>
+const SignIn = () => (
+  <div className="text-center">
+    <form className="form-signin">
+      <img className="mb-4" src={logo} alt="" width="72" height="72" />
+      <h1 className="h3 mb-3 font-weight-normal">Пожалуйста, войдите</h1>
+      <label htmlFor="inputEmail" className="sr-only">Email</label>
+      <input type="email" id="inputEmail" className="form-control" placeholder="Email" required autoFocus />
+      <label htmlFor="inputPassword" className="sr-only">Пароль</label>
+      <input type="password" id="inputPassword" className="form-control" placeholder="Пароль" required />
+      <div className="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me" /> Запомнить
+        </label>
       </div>
-    </div>
-    <div className="col-1">
-      <img src={pic} className="card-img ml-2" style={{ width: 40, height: 40 }} alt="" loading="lazy" />
-    </div>
+      <button className="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+      <Link to="/"><button className="btn btn btn-outline-secondary btn-block" type="submit">Зарегистрироваться</button></Link>
+    </form>
+  </div>
+)
+
+const SignUp = () => (
+  <div className="text-center">
+    <form className="form-signup">
+      <img className="mb-4" src={logo} alt="" width="72" height="72" />
+      <h1 className="h3 mb-3 font-weight-normal">Регистрация</h1>
+      <div class="form-group">
+        <label htmlFor="inputNikname" className="sr-only">Никнейм</label>
+        <input type="email" id="inputNikname" className="form-control" placeholder="Никнейм" required autoFocus />
+      </div>
+      <div class="form-group">
+        <label htmlFor="inputEmail" className="sr-only">Email</label>
+        <input type="email" id="inputEmail" className="form-control" placeholder="Email" required />
+      </div>
+      <div class="form-group">
+        <label htmlFor="inputPassword" className="sr-only">Пароль</label>
+        <input type="password" id="inputPassword" className="form-control" placeholder="Пароль" required />
+        <label htmlFor="repeatInputPassword" className="sr-only">Повторите пароль</label>
+        <input type="password" id="repeatInputPassword" className="form-control" placeholder="Повторите пароль" required />
+      </div>
+      <button className="btn btn-lg btn-primary btn-block" type="submit">Зарегистрироваться</button>
+    </form>
   </div>
 )
 
 const Events = () => (
   <>
-    <Events_like />
+    <Block
+      time="3 min"
+      user={{ avatar: pic, username: "userName" }}
+      event="SUBSCRIB"
+    />
+    <Block
+      time="3 min"
+      user={{ avatar: pic, username: "userName" }}
+      event="LIKE"
+      moment={{ pictures: pic }}
+    />
   </>
 )
 
 const Setings_modal = () => (
-  <div class="modal fade" id="setings_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Настройки</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  <div className="modal fade" id="setings_modal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title" id="exampleModalLabel">Настройки</h5>
+          <button type="button" className="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-          <form class="was-validated">
-            <div class="form-group">
-              <label for="ieInputEmail1">Email</label>
-              <input type="email" class="form-control" id="inputEmail1" aria-describedby="email" />
+        <div className="modal-body">
+          <form className="was-validated">
+            <div className="form-group">
+              <label htmlFor="inputEmail1">Email</label>
+              <input type="email" className="form-control" id="inputEmail1" aria-describedby="email" />
             </div>
-            <div class="form-group">
-              <label for="inputNikname">Nikname</label>
-              <input type="text" class="form-control" id="inputNikname" aria-describedby="nikname" />
+            <div className="form-group">
+              <label htmlFor="inputNikname">Nikname</label>
+              <input type="text" className="form-control" id="inputNikname" aria-describedby="nikname" />
             </div>
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="validatedInputGroupCustomFile" required />
-              <label class="custom-file-label" for="validatedInputGroupCustomFile">Выберите аватарку</label>
+            <div className="custom-file">
+              <input type="file" className="custom-file-input" id="validatedInputGroupCustomFile" required />
+              <label className="custom-file-label" htmlFor="validatedInputGroupCustomFile">Выберите аватарку</label>
             </div>
           </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-          <button type="button" class="btn btn-primary">Сохранить</button>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-secondary" data-dismiss="modal">Отмена</button>
+          <button type="button" className="btn btn-primary">Сохранить</button>
         </div>
       </div>
     </div>
@@ -155,8 +195,8 @@ const User = () => {
             </div>
           </div>
           <div className="d-flex" >
-            <input class="btn btn-primary" type="button" value="Подписаться"></input>
-            <input class="btn btn-outline-secondary" type="button" value="Отписаться"></input>
+            <input className="btn btn-primary" type="button" value="Подписаться"></input>
+            <input className="btn btn-outline-secondary" type="button" value="Отписаться"></input>
           </div>
         </div>
         <div>
@@ -184,26 +224,26 @@ function Header() {
         <div className="collapse navbar-collapse" id="navbarCollapse">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
-              <Link className="nav-link" to='/'>
-                <Icon28NewsfeedOutline className="mx-auto" />
+              <Link className="nav-link d-sm-flex d-md-block" to='/'>
+                <Icon28NewsfeedOutline className="mr-sm-2 m-md-auto" />
                 Лента
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex" to='/user'>
-                <Icon28UserOutline />
+              <Link className="nav-link d-sm-flex d-md-block" to='/user'>
+                <Icon28UserOutline className="mr-sm-2 m-md-auto" />
                 Моя страница
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex" to='/search'>
-                <Icon28SearchOutline />
+              <Link className="nav-link d-sm-flex d-md-block" to='/search'>
+                <Icon28SearchOutline className="mr-sm-2 m-md-auto" />
                 Поиск
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex" to='/events'>
-                <Icon28LikeOutline />
+              <Link className="nav-link d-sm-flex d-md-block" to='/events'>
+                <Icon28LikeOutline className="mr-sm-2 m-md-auto" />
                 События
               </Link>
             </li>
@@ -211,6 +251,12 @@ function Header() {
               <a className="nav-link disabled" href="/users" tabIndex="-1" aria-disabled="true">Disabled</a>
             </li> */}
           </ul>
+          <Link className="nav-link" to='/signin'>
+            <button className="btn btn-primary">Войти</button>
+          </Link>
+          <Link className="nav-link" to='/signup'>
+            <button className="btn btn-light">Зарегистрироваться</button>
+          </Link>
           <form className="form-inline mt-2 mt-md-0">
             <div className="input-group mr-sm-2">
               <div className="input-group-prepend">
@@ -220,8 +266,8 @@ function Header() {
               <input className="form-control mr-sm-2" type="text" placeholder="#Природа/@denis_vlas" aria-label="Search" />
             </div>
             {/* <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" /> */}
-            <Link className="nav-link" to='/search'>
-              <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+            <Link to='/search'>
+              <button className="btn btn-outline-success m-0" type="submit">Поиск</button>
             </Link>
           </form>
         </div>
@@ -264,30 +310,6 @@ const MomentsCardCarosel = (props) => (
   </div>
 )
 
-const Comment = (props) => {
-  var palochki = [];
-  for (var i = 0; i < props.level; i++)
-    palochki.push(<div className="mr-2" >|<br />|<br />|<br />|<br /></div>);
-  return (<div className="d-flex" >
-    {palochki}
-    <div className="row no-gutters mb-2">
-      <div className="col-1">
-        <img src={pic} className="card-img ml-2" style={{ width: 40, height: 40 }} alt="" loading="lazy" />
-      </div>
-      <div className={`col-11`}>
-        <div className="card-body py-0" >
-          <p className="card-text mb-0" ><b>UserName</b> This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-          <p className="card-text">
-            <small className="text-muted">3 mins ago
-            <b className="ml-2" >12 отметок "Нравится"</b>
-              <b className="ml-2" >Ответить</b>
-            </small></p>
-        </div>
-      </div>
-    </div>
-  </div>)
-}
-
 const MomentsCard = () => (
   <div className="card mb-3">
     <nav className="navbar navbar-light bg-light">
@@ -321,7 +343,7 @@ const MomentsCard = () => (
         text="This is a wider card with supporting text below as a natural lead-in to additional content."
         user={{ avatar: pic, username: "UserName" }}
         level={1}
-        count_likes={14}/>
+        count_likes={14} />
       <Block
         time="12 min"
         text="This is a wider card with supporting text below as a natural lead-in to additional content."
@@ -385,10 +407,13 @@ const Main = () => (
         <Route path='/search' component={Search} />
         <Route path='/user' component={User} />
         <Route path='/events' component={Events} />
+        <Route path='/signin' component={SignIn} />
+        <Route path='/signup' component={SignUp} />
       </Switch>
     </div>
   </main>
 )
+
 const App = () => {
   console.log(window.location.href);
 
