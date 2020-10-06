@@ -48,7 +48,7 @@ const App = () => {
     var palochki = [];
     if (level)
       for (var i = 0; i < level; i++)
-        palochki.push(<div key={i} className="mr-2" >|<br />|<br />|<br />|<br /></div>);
+        palochki.push(<div key={i} className="mr-4" />);
 
     return (
       <div className="row no-gutters">
@@ -337,11 +337,11 @@ const App = () => {
             <img src={this_pic} className="d-block w-100" alt="..." />
           </div>)}
       </div>
-      <a className="carousel-control-prev" role="button" data-slide="prev">
+      <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
         <span className="sr-only">Previous</span>
       </a>
-      <a className="carousel-control-next" role="button" data-slide="next">
+      <a className="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
         <span className="carousel-control-next-icon" aria-hidden="true"></span>
         <span className="sr-only">Next</span>
       </a>
