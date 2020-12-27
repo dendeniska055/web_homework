@@ -10,7 +10,9 @@ import {
 import { Header, Footer } from "./panels/MainComponent";
 import { SignIn, SignUp } from "./panels/Sign";
 import { Profile, Setings_modal } from "./panels/Profile";
-import { ImgGrid, Upload_modal, MomentsCard } from "./panels/Img";
+import { MomentsCard, PublicationGridUrl } from "./panels/Publication";
+import { Upload_modal } from "./panels/Img";
+import { Search } from "./panels/Search";
 
 import { Block } from "./components/block";
 import $ from "jquery";
@@ -45,17 +47,11 @@ const App = () => {
     return (
       <div className="row justify-content-center">
         <div className="Home" >
+          <PublicationGridUrl url="/api/publication/get_feed/" />
           <MomentsCard />
           <MomentsCard />
         </div>
       </div>
-    )
-  }
-
-  const Search = () => {
-    setActivePanel("search");
-    return (
-      <ImgGrid images={[pic, pic, pic,pic, pic, pic,pic, pic, pic,pic, pic, pic]} />
     )
   }
 
@@ -69,7 +65,7 @@ const App = () => {
               <Home activePanel={activePanel} />
             </Route>
             <Route path="/search">
-              <Search activePanel={activePanel} myId={myId} />
+              <Search activePanel={activePanel} setActivePanel={setActivePanel} myId={myId} />
             </Route>
                                         
             <Route exact path="/profile">

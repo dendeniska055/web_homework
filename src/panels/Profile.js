@@ -7,7 +7,7 @@ import { Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import $ from "jquery";
-import { ImgGrid } from "./Img";
+import { ImgGrid, PublicationGridUrl } from "./Publication";
 
 export const Profile = (props) => {
   const [id, setId] = useState(props.id ? props.id : props.myId);
@@ -48,14 +48,17 @@ export const Profile = (props) => {
 
   function get_publications(id) {
     if (id == -1) return;
-    $.ajax(`/api/publication/?user=${id}&page=2`, {
+    $.ajax(`/api/publication/?user=${id}&page=1`, {
       method: "GET",
     })
       .done(function (data) {
         console.log("get_publications: ", data);
         setPublications(
           data.results.map((publication) => {
-            return publication.photo;
+            return {
+              id: publication.id,
+              url: publication.photo,
+            };
           })
         );
       })
@@ -129,7 +132,7 @@ export const Profile = (props) => {
               </Link>
             )} */}
           </div>
-          {id !== myId && (
+          {id !== myId && myId !== -1 && (
             <div className="d-flex">
               {subscriptionId == -1 && (
                 <input
@@ -155,7 +158,8 @@ export const Profile = (props) => {
         </div>
       </div>
       <div className="mt-3">
-        <ImgGrid images={publications} />
+        <PublicationGridUrl url={`/api/publication/?user=${id}`} />
+        {/* <ImgGrid images={publications} /> */}
       </div>
     </>
   );
@@ -237,12 +241,11 @@ export const Setings_modal = (props) => {
       </div>
     </div>
   );
-  console.log(props)
+  console.log(props);
   const [id, setId] = useState(props.id ? props.id : props.myId);
   const [profile, setProfile] = useState({});
 
-
-  function on_submit(e){
+  function on_submit(e) {
     e.preventDefault();
   }
   return (
@@ -250,8 +253,12 @@ export const Setings_modal = (props) => {
       <Modal.Header closeButton>
         <Modal.Title>Настройки</Modal.Title>
       </Modal.Header>
-        <form className="was-validated" id="settings" onSubmit={(e)=>on_submit(e)}>
-      <Modal.Body>
+      <form
+        className="was-validated"
+        id="settings"
+        onSubmit={(e) => on_submit(e)}
+      >
+        <Modal.Body>
           <div className="form-group">
             <label htmlFor="settingsEmail">Email</label>
             <input
@@ -281,23 +288,20 @@ export const Setings_modal = (props) => {
               accept=".jpg, .jpeg, .png"
               defaultValue={profile.photo}
             />
-            <label
-              className="custom-file-label"
-              htmlFor="settingsPhoto"
-            >
+            <label className="custom-file-label" htmlFor="settingsPhoto">
               Выберите аватарку
             </label>
           </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={() => props.setModal("")}>
-          Отмена
-        </Button>
-        <Button variant="primary" type="submit">
-          Сохранить
-        </Button>
-      </Modal.Footer>
-        </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => props.setModal("")}>
+            Отмена
+          </Button>
+          <Button variant="primary" type="submit">
+            Сохранить
+          </Button>
+        </Modal.Footer>
+      </form>
     </Modal>
   );
 };
