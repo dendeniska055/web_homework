@@ -12,7 +12,6 @@ import $ from "jquery";
 
 export const Search = (props) => {
   props.setActivePanel("search");
-  const [searchText, setSearchText] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
   const [searchOptions, setSearchOptions] = useState([]);
@@ -117,7 +116,6 @@ export const Search = (props) => {
           onInput={(e) => {
             console.log(e);
             e.target.value = search(e.target.value);
-            setSearchText(e.target.value);
           }}
           options={searchOptions}
           placeholder="#Природа/@denis_vlas"

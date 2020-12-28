@@ -1,9 +1,7 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-// import './App.css';
-import { Switch, Route, Link } from "react-router-dom";
+import React, { useState } from "react";
 import logo from "../img/logo.jpg";
 
-import { DatePicker,FormStatus, FormItem } from "@vkontakte/vkui";
+import { DatePicker,FormStatus } from "@vkontakte/vkui";
 import "@vkontakte/vkui/dist/vkui.css";
 
 import $ from "jquery";

@@ -1,6 +1,5 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { FunctionComponent } from "react";
 import { Link } from "react-router-dom";
-import $ from "jquery";
 
 type Users_type = {
   avatar: string,

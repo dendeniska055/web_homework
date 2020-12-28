@@ -73,29 +73,6 @@ export const Upload_modal = (props) => {
     checkSelectedTags();
   }, [selectedTags]);
 
-  function createTag(title) {
-    $.ajax(`/api/tag/`, {
-      method: "POST",
-      data: {
-        title: title,
-      },
-    })
-      .done(function (data) {
-        // console.log("/api/tag/ data", data);
-        setSelectedTags(
-          selectedTags.map((tag, i) => {
-            return {
-              value: tag.title === title ? data.id : tag.value,
-              label: tag.title,
-            };
-          })
-        );
-      })
-      .fail(function (data) {
-        // console.log("/api/tag/ FAIL", data);
-      });
-  }
-
   function searchTags(title) {
     $.ajax(`/api/tag/?search=${title}`, {
       method: "GET",
@@ -136,7 +113,7 @@ export const Upload_modal = (props) => {
           })
             .done(function (data) {
               // console.log("`/api/tag/?get=${label}`", data);
-              if (data.count == 1) {
+              if (data.count === 1) {
                 localSelectedTags[i].value = data.results[0].id;
                 setSelectedTags(localSelectedTags);
               } else {
@@ -173,20 +150,10 @@ export const Upload_modal = (props) => {
 
   function add_photo(e) {
     e.preventDefault();
-    // console.log(
-    //   selectedTags.map((tag, i) => {
-    //     return tag.value;
-    //   })
-    // );
-    var photo = $("#photo").get(0).files[0];
     var fd = new FormData();
-
     fd.append("photo", $("#photo").get(0).files[0]);
     fd.append("description", $("#description").val());
     for (var i in selectedTags) fd.append("tags", selectedTags[i].value);
-    // console.log(photo);
-    // console.log($("#description").val());
-    // console.log(fd);
     $.ajax("/api/publication/", {
       method: "POST",
       data: fd,
@@ -197,7 +164,7 @@ export const Upload_modal = (props) => {
         // console.log("data", data);
       })
       .fail(function (data) {
-        // console.log("FAIL", data);
+        console.log("FAIL", data);
       });
     setTagsInput("");
     setSelectedTags([]);
@@ -209,7 +176,7 @@ export const Upload_modal = (props) => {
   }, []);
 
   return (
-    <Modal show={props.modal == "upload"} onHide={() => props.setModal("")}>
+    <Modal show={props.modal === "upload"} onHide={() => props.setModal("")}>
       <Modal.Header closeButton>
         <Modal.Title>Добавить публикацию</Modal.Title>
       </Modal.Header>

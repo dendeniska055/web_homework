@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../img/logo.jpg";
 
-import Icon28UserOutline from "@vkontakte/icons/dist/28/user_outline";
-import Icon28NewsfeedOutline from "@vkontakte/icons/dist/28/newsfeed_outline";
-import Icon28SearchOutline from "@vkontakte/icons/dist/28/search_outline";
-import Icon28LikeOutline from "@vkontakte/icons/dist/28/like_outline";
-import { Icon28AddOutline } from "@vkontakte/icons";
+import {
+  Icon28UserOutline,
+  Icon28NewsfeedOutline,
+  Icon28SearchOutline,
+  Icon28AddOutline,
+} from "@vkontakte/icons";
 
 import $ from "jquery";
 
@@ -90,14 +91,14 @@ export const Header = (props) => {
                   </Link>
                 </li> */}
                 <li className={"nav-item"}>
-                  <a
+                  <div
                     className="nav-link d-sm-flex d-md-block"
                     onClick={() => props.setModal("upload")}
                   >
                     {/* <a className="nav-link d-sm-flex d-md-block" href="#upload_modal" data-toggle="modal" > */}
                     <Icon28AddOutline className="mr-sm-2 m-md-auto" />
                     Добавить
-                  </a>
+                  </div>
                 </li>
               </>
             )}
@@ -105,7 +106,7 @@ export const Header = (props) => {
               <a className="nav-link disabled" href="/users" tabIndex="-1" aria-disabled="true">Disabled</a>
             </li> */}
           </ul>
-          {props.myId == -1 ? (
+          {props.myId === -1 ? (
             <>
               <Link className="" to="/signin">
                 <button className="btn btn-primary">Войти</button>

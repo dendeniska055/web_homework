@@ -4,7 +4,7 @@ import $ from "jquery";
 import { PublicationGridUrl } from "./Publication";
 
 export function get_user_info(id, callbeck = null) {
-  if (id == -1) return;
+  if (id === -1) return;
   $.ajax(`/api/profile/${id}`, {
     method: "GET",
   })
@@ -24,10 +24,9 @@ export const Profile = (props) => {
   const myId = props.myId;
   const [profile, setProfile] = useState({});
   const [subscriptionId, setSubscriptionId] = useState(-1);
-  const [publications, setPublications] = useState([]);
 
   function get_subscription_info(author_id, subscriber_id) {
-    if (subscriber_id == -1 || subscriber_id == -1) return;
+    if (subscriber_id === -1 || subscriber_id === -1) return;
     $.ajax(`/api/subscription/?user=${author_id}&subscriber=${subscriber_id}`, {
       method: "GET",
     })
@@ -37,27 +36,6 @@ export const Profile = (props) => {
       })
       .fail(function (data) {
         console.log("get_subscription_info FAIL", data.responseText);
-      });
-  }
-
-  function get_publications(id) {
-    if (id == -1) return;
-    $.ajax(`/api/publication/?user=${id}`, {
-      method: "GET",
-    })
-      .done(function (data) {
-        console.log("get_publications: ", data);
-        setPublications(
-          data.results.map((publication) => {
-            return {
-              id: publication.id,
-              url: publication.photo,
-            };
-          })
-        );
-      })
-      .fail(function (data) {
-        console.log("get_publications FAIL", data.responseText);
       });
   }
 
@@ -95,9 +73,8 @@ export const Profile = (props) => {
       setProfile(data);
       setId(data.id);
     });
-    if (id != myId) get_subscription_info(myId, id);
-    get_publications(id);
-  }, []);
+    if (id !== myId) get_subscription_info(myId, id);
+  }, [id, myId]);
 
   return (
     <>
@@ -130,7 +107,7 @@ export const Profile = (props) => {
           </div>
           {id !== myId && myId !== -1 && (
             <div className="d-flex">
-              {subscriptionId == -1 && (
+              {subscriptionId === -1 && (
                 <input
                   className="btn btn-primary"
                   type="button"
@@ -138,7 +115,7 @@ export const Profile = (props) => {
                   onClick={() => subscribe(profile.id)}
                 />
               )}
-              {subscriptionId != -1 && (
+              {subscriptionId !== -1 && (
                 <input
                   className="btn btn-outline-secondary"
                   type="button"
@@ -161,91 +138,16 @@ export const Profile = (props) => {
   );
 };
 
-export const Setings_modal = (props) => {
-  var a = (
-    <div
-      className="modal fade"
-      id="setings_modal"
-      tabIndex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id="exampleModalLabel">
-              Настройки
-            </h5>
-            <button
-              type="button"
-              className="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div className="modal-body">
-            <form className="was-validated">
-              <div className="form-group">
-                <label htmlFor="inputEmail1">Email</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="inputEmail1"
-                  aria-describedby="email"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="inputNikname">Nikname</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="inputNikname"
-                  aria-describedby="nikname"
-                />
-              </div>
-              <div className="custom-file">
-                <input
-                  type="file"
-                  className="custom-file-input"
-                  id="validatedInputGroupCustomFile"
-                  required
-                />
-                <label
-                  className="custom-file-label"
-                  htmlFor="validatedInputGroupCustomFile"
-                >
-                  Выберите аватарку
-                </label>
-              </div>
-            </form>
-          </div>
-          <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Отмена
-            </button>
-            <button type="button" className="btn btn-primary">
-              Сохранить
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+export const SetingsModal = (props) => {
   console.log(props);
-  const [id, setId] = useState(props.id ? props.id : props.myId);
+  // const [id, setId] = useState(props.id ? props.id : props.myId);
   const [profile, setProfile] = useState({});
 
   function on_submit(e) {
     e.preventDefault();
   }
   return (
-    <Modal show={props.modal == "settings"} onHide={() => props.setModal("")}>
+    <Modal show={props.modal === "settings"} onHide={() => props.setModal("")}>
       <Modal.Header closeButton>
         <Modal.Title>Настройки</Modal.Title>
       </Modal.Header>

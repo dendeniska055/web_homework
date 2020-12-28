@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import {
-  Icon36LikeOutline,
-  Icon36Like,
-} from "@vkontakte/icons";
+import { Icon36LikeOutline, Icon36Like } from "@vkontakte/icons";
 import { Button } from "react-bootstrap";
 
 import { Block } from "../components/block";
@@ -34,10 +31,8 @@ function timeToStringByTime(date) {
 export const Publication = (props) => {
   // props.setActivePanel("publication");
   const [publicationInfo, setPublicationInfo] = useState();
-  const [tags, setTags] = useState([]);
   const [likes, setLikes] = useState();
   const [comments, setComments] = useState();
-  // const [usersInfo, setUsersInfo] = useState({ avatar: "", username: "" });
   const [publicationData, setPublicationData] = useState();
 
   function get_comments(id) {
@@ -84,7 +79,7 @@ export const Publication = (props) => {
     get_publication(props.id);
     get_likes(props.id);
     get_comments(props.id);
-  }, []);
+  }, [props.id]);
   useEffect(() => {
     setPublicationData({
       ...publicationInfo,
@@ -165,8 +160,7 @@ export const MomentsCard = (props) => {
           {/* <Icon28CommentOutline className="mr-2" width={36} height={36} /> */}
           {props.likes_count != undefined && (
             <h5 className="card-title my-auto">
-              {" "}
-              Нравится: {props.likes_count}{" "}
+              Нравится: {props.likes_count}
             </h5>
           )}
         </div>
@@ -246,8 +240,8 @@ export const PublicationGridUrl = (props) => {
   const [publications, setPublications] = useState([]);
 
   function get_publications(url) {
-    console.log(url)
-    if (!url || url.indexOf("/api/") == -1) return;
+    console.log(url);
+    if (!url || url.indexOf("/api/") === -1) return;
     $.ajax(url, {
       method: "GET",
     })

@@ -4,7 +4,7 @@ import pic from "./img/pic.jpg";
 
 import { Header, Footer } from "./panels/MainComponent";
 import { SignIn, SignUp } from "./panels/Sign";
-import { Profile, Setings_modal } from "./panels/Profile";
+import { Profile, SetingsModal } from "./panels/Profile";
 import { PublicationGridUrl, Publication } from "./panels/Publication";
 import { Upload_modal } from "./panels/Img";
 import { Search } from "./panels/Search";
@@ -15,7 +15,6 @@ import $ from "jquery";
 const App = () => {
   const [activePanel, setActivePanel] = useState('home');
   const [myId, setMyId] = useState(-1);
-  const [authorized, setAuthorized] = useState(true);
   const [modal, setModal] = useState('');
 
   const Events = () => {
@@ -118,7 +117,6 @@ const App = () => {
       })
       .fail(function (data) {
         console.log("FAIL", data);
-        setAuthorized(false);
         if (
           window.location.href.indexOf("/signin") === -1 &&
           window.location.href.indexOf("/signup") === -1
@@ -130,7 +128,7 @@ const App = () => {
   return (
     <React.Fragment>
       <Upload_modal modal={modal} setModal={setModal} />
-      <Setings_modal modal={modal} setModal={setModal} />
+      <SetingsModal modal={modal} setModal={setModal} />
       <Header activePanel={activePanel} setActivePanel={setActivePanel} myId={myId} setMyId={setMyId} setModal={setModal} />
       <Main setActivePanel={setActivePanel} />
       <Footer setActivePanel={setActivePanel} />
