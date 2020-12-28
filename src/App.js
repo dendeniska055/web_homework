@@ -15,6 +15,7 @@ import $ from "jquery";
 const App = () => {
   const [activePanel, setActivePanel] = useState('home');
   const [myId, setMyId] = useState(-1);
+  const [authorized, setAuthorized] = useState(true);
   const [modal, setModal] = useState('');
 
   const Events = () => {
@@ -109,15 +110,22 @@ const App = () => {
   useEffect(() => {
     // console.log(activePanel);
     $.ajax("/rest_api/get_my_id/", {
-      method: "POST"
-    }).done(function (data) {
+      method: "POST",
+    })
+      .done(function (data) {
         // console.log("data", data, parseInt(data));
         setMyId(parseInt(data));
       })
       .fail(function (data) {
         console.log("FAIL", data);
+        setAuthorized(false);
+        if (
+          window.location.href.indexOf("/signin") === -1 &&
+          window.location.href.indexOf("/signup") === -1
+        )
+          window.location.href = "/signin";
       });
-  },[]);
+  }, []);
 
   return (
     <React.Fragment>
