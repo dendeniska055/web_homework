@@ -1,12 +1,12 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import logo from "../img/logo.jpg";
 
 import Icon28UserOutline from "@vkontakte/icons/dist/28/user_outline";
 import Icon28NewsfeedOutline from "@vkontakte/icons/dist/28/newsfeed_outline";
 import Icon28SearchOutline from "@vkontakte/icons/dist/28/search_outline";
 import Icon28LikeOutline from "@vkontakte/icons/dist/28/like_outline";
-import { Icon24Search, Icon28AddOutline } from "@vkontakte/icons";
+import { Icon28AddOutline } from "@vkontakte/icons";
 
 import $ from "jquery";
 
@@ -78,7 +78,7 @@ export const Header = (props) => {
                     Профиль
                   </Link>
                 </li>
-                <li
+                {/* <li
                   className={
                     "nav-item" +
                     (props.activePanel === "events" ? " active" : "")
@@ -88,7 +88,7 @@ export const Header = (props) => {
                     <Icon28LikeOutline className="mr-sm-2 m-md-auto" />
                     События
                   </Link>
-                </li>
+                </li> */}
                 <li className={"nav-item"}>
                   <a
                     className="nav-link d-sm-flex d-md-block"

@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
-import { Switch, Route, Link, Router, matchPath } from "react-router-dom";
-import { Icon16LikeOutline, Icon16Like } from "@vkontakte/icons";
+import { Link } from "react-router-dom";
 import $ from "jquery";
 
 type Users_type = {
@@ -62,16 +61,16 @@ export const Block: FunctionComponent<BlockProps> = (
           <p className="card-text mb-0">
             <b>{user.username}</b> {event ? events_txts[event] : text}
           </p>
-          <p>
+          
             <small className="text-muted d-flex">
-              <div className="mr-2" >{time}</div>
-              <div className="mr-2">{like ? <Icon16Like /> : <Icon16LikeOutline />}</div>
+              <div className="mr-2" ><p>{time}</p></div>
+              {/* <div className="mr-2">{like ? <Icon16Like /> : <Icon16LikeOutline />}</div> */}
               {count_likes && !event && (
-                <b className="mr-2">{count_likes} отметок "Нравится"</b>
+                <p><b className="mr-2">{count_likes} отметок "Нравится"</b></p>
               )}
-              {can_answer && !event && <b>Ответить</b>}
+              {can_answer && !event && <p><b>Ответить</b></p>}
             </small>
-          </p>
+          
         </div>
       </div>
       <div className="col-1">

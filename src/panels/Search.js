@@ -1,21 +1,9 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-import { Switch, Route, Link } from "react-router-dom";
-import logo from "../img/logo.jpg";
-import pic from "../img/pic.jpg";
-
-import Icon28UserOutline from "@vkontakte/icons/dist/28/user_outline";
-import Icon28NewsfeedOutline from "@vkontakte/icons/dist/28/newsfeed_outline";
-import Icon28SearchOutline from "@vkontakte/icons/dist/28/search_outline";
-import Icon28LikeOutline from "@vkontakte/icons/dist/28/like_outline";
-import { Icon24Search, Icon28AddOutline } from "@vkontakte/icons";
+import React, { useState, useEffect } from "react";
 
 import {
   FormItem,
-  Select,
-  CustomSelect,
   CustomSelectOption,
   Avatar,
-  Group,
 } from "@vkontakte/vkui";
 import { ChipsSelect } from "@vkontakte/vkui/dist/unstable";
 

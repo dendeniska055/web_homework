@@ -1,18 +1,6 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-// import './App.css';
-import { Switch, Route, Link, Redirect } from "react-router-dom";
-import Icon24LikeOutline from "@vkontakte/icons/dist/24/like_outline";
-import Icon24CommentOutline from "@vkontakte/icons/dist/24/comment_outline";
-import Icon28SettingsOutline from "@vkontakte/icons/dist/28/settings_outline";
-import Icon56AddCircleOutline from "@vkontakte/icons/dist/56/add_circle_outline";
-
-import Icon28UserOutline from "@vkontakte/icons/dist/28/user_outline";
-import Icon28NewsfeedOutline from "@vkontakte/icons/dist/28/newsfeed_outline";
-import Icon28SearchOutline from "@vkontakte/icons/dist/28/search_outline";
-import Icon28LikeOutline from "@vkontakte/icons/dist/28/like_outline";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
-import pic from "../img/pic.jpg";
-
 import { FormItem } from "@vkontakte/vkui";
 import { ChipsSelect } from "@vkontakte/vkui/dist/unstable";
 
@@ -94,7 +82,6 @@ export const Upload_modal = (props) => {
     })
       .done(function (data) {
         // console.log("/api/tag/ data", data);
-        // console.log("$$$$$");
         setSelectedTags(
           selectedTags.map((tag, i) => {
             return {

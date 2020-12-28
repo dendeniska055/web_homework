@@ -1,13 +1,7 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-// import './App.css';
-import pic from "../img/pic.jpg";
-import { Icon28SettingsOutline } from "@vkontakte/icons";
-
+import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
-
 import $ from "jquery";
-import { ImgGrid, PublicationGridUrl } from "./Publication";
+import { PublicationGridUrl } from "./Publication";
 
 export function get_user_info(id, callbeck = null) {
   if (id == -1) return;

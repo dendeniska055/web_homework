@@ -1,21 +1,16 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-// import './App.css';
-import { Switch, Route, Link, Redirect } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Icon36LikeOutline,
   Icon36Like,
-  Icon28CommentOutline,
 } from "@vkontakte/icons";
-import { Button, Modal } from "react-bootstrap";
-import pic from "../img/pic.jpg";
+import { Button } from "react-bootstrap";
 
 import { Block } from "../components/block";
-import { ImgGrid, ImgCarosel } from "./Img";
-import { get_user_info } from "./Profile";
-import { Avatar } from "@vkontakte/vkui";
-import { ChipsSelect } from "@vkontakte/vkui/dist/unstable";
+import { ImgGrid } from "./Img";
+import { Avatar, WriteBar } from "@vkontakte/vkui";
 
-import $, { timers } from "jquery";
+import $ from "jquery";
 
 var date_options = {
   year: "numeric",
@@ -37,12 +32,26 @@ function timeToStringByTime(date) {
 }
 
 export const Publication = (props) => {
-  props.setActivePanel("publication");
+  // props.setActivePanel("publication");
   const [publicationInfo, setPublicationInfo] = useState();
   const [tags, setTags] = useState([]);
   const [likes, setLikes] = useState();
-  const [usersInfo, setUsersInfo] = useState({ avatar: "", username: "" });
+  const [comments, setComments] = useState();
+  // const [usersInfo, setUsersInfo] = useState({ avatar: "", username: "" });
   const [publicationData, setPublicationData] = useState();
+
+  function get_comments(id) {
+    $.ajax(`/api/comment/?publication=${id}`, {
+      method: "GET",
+    })
+      .done(function (data) {
+        console.log("get_comments: ", data);
+        setComments(data);
+      })
+      .fail(function (data) {
+        console.log("get_comments FAIL", data.responseText);
+      });
+  }
 
   function get_likes(id) {
     $.ajax(`/api/publication/${id}/get_likes`, {
@@ -57,29 +66,14 @@ export const Publication = (props) => {
       });
   }
 
-  function get_tags(id) {
-    $.ajax(`/api/publication/${id}/get_tags`, {
-      method: "GET",
-    })
-      .done(function (data) {
-        // console.log("get_tags: ", data);
-        setTags(data);
-      })
-      .fail(function (data) {
-        console.log("get_tags FAIL", data.responseText);
-      });
-  }
-
   function get_publication(id) {
     $.ajax(`/api/publication/${id}`, {
       method: "GET",
     })
       .done(function (data) {
         // console.log("get_publication: ", data);
+        data.avatar = "/" + data.avatar;
         setPublicationInfo(data);
-        get_user_info(data.user, (data) => {
-          setUsersInfo({ avatar: data.photo, username: data.username });
-        });
       })
       .fail(function (data) {
         console.log("get_publication FAIL", data.responseText);
@@ -88,22 +82,28 @@ export const Publication = (props) => {
 
   useEffect(() => {
     get_publication(props.id);
-    get_tags(props.id);
     get_likes(props.id);
+    get_comments(props.id);
   }, []);
   useEffect(() => {
     setPublicationData({
       ...publicationInfo,
       ...likes,
-      ...usersInfo,
-      tags: tags,
+      comments: { ...comments },
     });
-  }, [publicationInfo, likes, tags, usersInfo]);
+  }, [publicationInfo, likes, comments]);
 
-  return <MomentsCard {...publicationData} get_likes={get_likes} />;
+  return (
+    <MomentsCard
+      {...publicationData}
+      get_likes={get_likes}
+      get_comments={get_comments}
+    />
+  );
 };
 
 export const MomentsCard = (props) => {
+  const [commentText, setCommentText] = useState("");
   function set_like(id, itsLike) {
     var set_like = itsLike ? "like" : "dislike";
     $.ajax(`/api/publication/${id}/set_like/`, {
@@ -119,7 +119,21 @@ export const MomentsCard = (props) => {
       });
   }
 
-  console.log("props", props);
+  function new_comment() {
+    $.ajax(`/api/comment/`, {
+      method: "POST",
+      data: { publication: props.id, comment: commentText },
+    })
+      .done(function (data) {
+        console.log("new_comment: ", data);
+        props.get_comments(props.id);
+      })
+      .fail(function (data) {
+        console.error("new_comment FAIL", data.responseText);
+      });
+  }
+  console.log(props);
+
   return (
     <div className="shadow card mb-3">
       {props.avatar &&
@@ -148,11 +162,14 @@ export const MomentsCard = (props) => {
               <Icon36LikeOutline onClick={() => set_like(props.id, true)} />
             )}
           </div>
-          <Icon28CommentOutline width={36} height={36} />
+          {/* <Icon28CommentOutline className="mr-2" width={36} height={36} /> */}
+          {props.likes_count != undefined && (
+            <h5 className="card-title my-auto">
+              {" "}
+              Нравится: {props.likes_count}{" "}
+            </h5>
+          )}
         </div>
-        {props.likes_count != undefined && (
-          <h5 className="card-title"> Нравится: {props.likes_count} </h5>
-        )}
         {props.description && props.description.length > 0 && (
           <p className="card-text">
             {props.username && props.username.length > 0 && (
@@ -162,16 +179,15 @@ export const MomentsCard = (props) => {
           </p>
         )}
         {props.date && (
-          <p className="card-text">
+          <p className="card-text my-1">
             <small className="text-muted">
               {timeToStringByTime(props.date)}
             </small>
           </p>
         )}
-        {props.tags && props.tags.length > 0 && (
+        {props.tags_title && props.tags_title.length > 0 && (
           <div className="d-flex">
-            {props.tags.map((tag, i) => {
-              console.log(tag);
+            {props.tags_title.map((tag, i) => {
               return (
                 <Link key={i} to={`/search/?tag=${tag.title}`} className="mr-2">
                   #{tag.title}
@@ -180,13 +196,44 @@ export const MomentsCard = (props) => {
             })}
           </div>
         )}
-        <Block
+        <div className="border my-3">
+          <WriteBar
+            value={commentText}
+            onChange={(e) => {
+              var text = e.target.value;
+              if (text[text.length - 1] !== "\n") setCommentText(text);
+              else {
+                new_comment();
+                setCommentText("");
+              }
+            }}
+            placeholder="Комментировать"
+          />
+        </div>
+        {console.log(props.comments)}
+        {props.comments && console.log(props.comments)}
+        {props.comments &&
+          props.comments.results &&
+          props.comments.results.map((comment, i) => {
+            return (
+              <Block
+                time={timeToStringByTime(comment.date)}
+                text={comment.comment}
+                user={{
+                  avatar: "/" + comment.avatar,
+                  username: comment.username,
+                }}
+                // count_likes={14}
+              />
+            );
+          })}
+        {/* <Block
           time="30 min"
           text="This is a wider card with supporting text below as a natural lead-in to additional content."
           user={{ avatar: pic, username: "UserName" }}
           level={0}
           count_likes={14}
-        />
+        /> */}
       </div>
     </div>
   );
@@ -199,7 +246,8 @@ export const PublicationGridUrl = (props) => {
   const [publications, setPublications] = useState([]);
 
   function get_publications(url) {
-    if (!url || url.indexOf("/api/") != 0) return;
+    console.log(url)
+    if (!url || url.indexOf("/api/") == -1) return;
     $.ajax(url, {
       method: "GET",
     })

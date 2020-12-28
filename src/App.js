@@ -1,16 +1,11 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
-import { Switch, Route, Link, Router, matchPath } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { Switch, Route } from 'react-router-dom'
 import pic from "./img/pic.jpg";
-import {
-  Icon24LikeOutline,
-  Icon24CommentOutline,
-  Icon56AddCircleOutline,
-} from "@vkontakte/icons";
 
 import { Header, Footer } from "./panels/MainComponent";
 import { SignIn, SignUp } from "./panels/Sign";
 import { Profile, Setings_modal } from "./panels/Profile";
-import { MomentsCard, PublicationGridUrl, Publication } from "./panels/Publication";
+import { PublicationGridUrl, Publication } from "./panels/Publication";
 import { Upload_modal } from "./panels/Img";
 import { Search } from "./panels/Search";
 
