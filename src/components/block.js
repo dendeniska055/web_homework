@@ -1,11 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { Switch, Route, Link, Router, matchPath } from "react-router-dom";
-import {
-  Icon24LikeOutline,
-  Icon24CommentOutline,
-  Icon56AddCircleOutline,
-} from "@vkontakte/icons";
-
+import { Icon16LikeOutline, Icon16Like } from "@vkontakte/icons";
 import $ from "jquery";
 
 type Users_type = {
@@ -31,7 +26,7 @@ type BlockProps = {
 };
 
 export const Block: FunctionComponent<BlockProps> = (
-  { user, event, text, time, count_likes, can_answer, level, moment },
+  { user, event, text, time, like, count_likes, can_answer, level, moment },
   props
 ) => {
   const like_txt = 'поставил(-а) вашему фото отметку "Нравится".';
@@ -68,12 +63,13 @@ export const Block: FunctionComponent<BlockProps> = (
             <b>{user.username}</b> {event ? events_txts[event] : text}
           </p>
           <p>
-            <small className="text-muted">
-              {time}
+            <small className="text-muted d-flex">
+              <div className="mr-2" >{time}</div>
+              <div className="mr-2">{like ? <Icon16Like /> : <Icon16LikeOutline />}</div>
               {count_likes && !event && (
-                <b className="ml-2">{count_likes} отметок "Нравится"</b>
+                <b className="mr-2">{count_likes} отметок "Нравится"</b>
               )}
-              {can_answer && !event && <b className="ml-2">Ответить</b>}
+              {can_answer && !event && <b>Ответить</b>}
             </small>
           </p>
         </div>

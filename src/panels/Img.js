@@ -285,7 +285,7 @@ export const ImgGrid = (props) => {
     <div className="card-columns">
       {props.images.map((this_pic, i) => (
         <Link key={i} to={`/publication/${this_pic.id}`}>
-          <div key={i} className="card">
+          <div key={i} className="shadow card">
             <img src={this_pic.url} className="card-img-top" alt="..." />
           </div>
         </Link>

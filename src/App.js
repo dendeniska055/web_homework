@@ -10,7 +10,7 @@ import {
 import { Header, Footer } from "./panels/MainComponent";
 import { SignIn, SignUp } from "./panels/Sign";
 import { Profile, Setings_modal } from "./panels/Profile";
-import { MomentsCard, PublicationGridUrl } from "./panels/Publication";
+import { MomentsCard, PublicationGridUrl, Publication } from "./panels/Publication";
 import { Upload_modal } from "./panels/Img";
 import { Search } from "./panels/Search";
 
@@ -41,15 +41,12 @@ const App = () => {
     )
   }
 
-
   const Home = () => {
     setActivePanel("home");
     return (
       <div className="row justify-content-center">
         <div className="Home" >
           <PublicationGridUrl url="/api/publication/get_feed/" />
-          <MomentsCard />
-          <MomentsCard />
         </div>
       </div>
     )
@@ -62,15 +59,14 @@ const App = () => {
           {/* <Router> */}
           <Switch>
             <Route exact path="/">
-              <Home activePanel={activePanel} />
+              <Home />
             </Route>
             <Route path="/search">
-              <Search activePanel={activePanel} setActivePanel={setActivePanel} myId={myId} />
+              <Search setActivePanel={setActivePanel} myId={myId} />
             </Route>
                                         
             <Route exact path="/profile">
               <Profile
-                activePanel={activePanel}
                 setActivePanel={setActivePanel}
                 myId={myId}
                 setModal={setModal}
@@ -81,7 +77,6 @@ const App = () => {
               path="/profile/:id"
               children={(data) => (
                 <Profile
-                  activePanel={activePanel}
                   setActivePanel={setActivePanel}
                   myId={myId}
                   id={data.match.params.id}
@@ -89,15 +84,24 @@ const App = () => {
                 />
               )}
             />
+            <Route
+              path="/publication/:id"
+              children={(data) => (
+                <Publication
+                  setActivePanel={setActivePanel}
+                  id={data.match.params.id}
+                />
+              )}
+            />
             
             <Route path="/events">
-              <Events activePanel={activePanel} setActivePanel={setActivePanel} myId={myId} />
+              <Events setActivePanel={setActivePanel} myId={myId} />
             </Route>
             <Route path="/signin">
-              <SignIn activePanel={activePanel} setActivePanel={setActivePanel} myId={myId} setMyId={setMyId} />
+              <SignIn setActivePanel={setActivePanel} myId={myId} setMyId={setMyId} />
             </Route>
             <Route path="/signup">
-              <SignUp activePanel={activePanel} setActivePanel={setActivePanel} myId={myId} setMyId={setMyId} />
+              <SignUp setActivePanel={setActivePanel} myId={myId} setMyId={setMyId} />
             </Route>
             {/* <Redirect from='/' to='/home'/> */}
           </Switch>
@@ -125,8 +129,8 @@ const App = () => {
       <Upload_modal modal={modal} setModal={setModal} />
       <Setings_modal modal={modal} setModal={setModal} />
       <Header activePanel={activePanel} setActivePanel={setActivePanel} myId={myId} setMyId={setMyId} setModal={setModal} />
-      <Main activePanel={activePanel} setActivePanel={setActivePanel} />
-      <Footer activePanel={activePanel} setActivePanel={setActivePanel} />
+      <Main setActivePanel={setActivePanel} />
+      <Footer setActivePanel={setActivePanel} />
     </React.Fragment>
   );
 }

@@ -9,28 +9,28 @@ import { Link } from "react-router-dom";
 import $ from "jquery";
 import { ImgGrid, PublicationGridUrl } from "./Publication";
 
+export function get_user_info(id, callbeck = null) {
+  if (id == -1) return;
+  $.ajax(`/api/profile/${id}`, {
+    method: "GET",
+  })
+    .done(function (data) {
+      // console.log("get_user_info data", data);
+      callbeck(data);
+    })
+    .fail(function (data) {
+      console.log("get_user_info FAIL", data.responseText);
+      // ОБРАБОТАТЬ ОСТУТСВИЕ ИЛИ ОШИБКУ !!!!!!
+    });
+}
+
 export const Profile = (props) => {
+  props.setActivePanel("profile");
   const [id, setId] = useState(props.id ? props.id : props.myId);
   const myId = props.myId;
   const [profile, setProfile] = useState({});
   const [subscriptionId, setSubscriptionId] = useState(-1);
   const [publications, setPublications] = useState([]);
-
-  function get_user_info(id) {
-    if (id == -1) return;
-    $.ajax(`/api/profile/${id}`, {
-      method: "GET",
-    })
-      .done(function (data) {
-        console.log("get_user_info data", data);
-        setProfile(data);
-        setId(data.id);
-      })
-      .fail(function (data) {
-        console.log("get_user_info FAIL", data.responseText);
-        // ОБРАБОТАТЬ ОСТУТСВИЕ ИЛИ ОШИБКУ !!!!!!
-      });
-  }
 
   function get_subscription_info(author_id, subscriber_id) {
     if (subscriber_id == -1 || subscriber_id == -1) return;
@@ -48,7 +48,7 @@ export const Profile = (props) => {
 
   function get_publications(id) {
     if (id == -1) return;
-    $.ajax(`/api/publication/?user=${id}&page=1`, {
+    $.ajax(`/api/publication/?user=${id}`, {
       method: "GET",
     })
       .done(function (data) {
@@ -97,12 +97,14 @@ export const Profile = (props) => {
   }
 
   useEffect(() => {
-    get_user_info(id);
+    get_user_info(id, (data) => {
+      setProfile(data);
+      setId(data.id);
+    });
     if (id != myId) get_subscription_info(myId, id);
     get_publications(id);
   }, []);
 
-  props.setActivePanel("profile");
   return (
     <>
       <div className="row">

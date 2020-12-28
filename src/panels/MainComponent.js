@@ -44,16 +44,6 @@ export const Header = (props) => {
         </button>
         <div className="collapse navbar-collapse" id="navbarCollapse">
           <ul className="navbar-nav mr-auto">
-            <li
-              className={
-                "nav-item" + (props.activePanel === "search" ? " active" : "")
-              }
-            >
-              <Link className="nav-link d-sm-flex d-md-block" to="/search">
-                <Icon28SearchOutline className="mr-sm-2 m-md-auto" />
-                Поиск
-              </Link>
-            </li>
             {props.myId != -1 && (
               <>
                 <li
@@ -64,6 +54,17 @@ export const Header = (props) => {
                   <Link className="nav-link d-sm-flex d-md-block" to="/">
                     <Icon28NewsfeedOutline className="mr-sm-2 m-md-auto" />
                     Лента
+                  </Link>
+                </li>
+                <li
+                  className={
+                    "nav-item" +
+                    (props.activePanel === "search" ? " active" : "")
+                  }
+                >
+                  <Link className="nav-link d-sm-flex d-md-block" to="/search">
+                    <Icon28SearchOutline className="mr-sm-2 m-md-auto" />
+                    Поиск
                   </Link>
                 </li>
                 <li

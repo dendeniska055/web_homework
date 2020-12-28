@@ -25,13 +25,35 @@ import $ from "jquery";
 export const Search = (props) => {
   props.setActivePanel("search");
   const [searchText, setSearchText] = useState("");
-  const [imageUrl, setImageUrl] = useState("/api/publication/get_feed");
+  const [imageUrl, setImageUrl] = useState("");
 
-  const [searchOptions, setSearchOptions] = useState([
-    { value: "1", label: "Arctic Monkeys", src: "/photo/default.jpg" },
-    { value: "2", label: "Звери", src: "/photo/default.jpg" },
-  ]);
+  const [searchOptions, setSearchOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const parseQueryString = (string) => {
+    return string
+      .slice(1)
+      .split("&")
+      .map((queryParam) => {
+        let kvp = queryParam.split("=");
+        return { key: kvp[0], value: kvp[1] };
+      })
+      .reduce((query, kvp) => {
+        // if (parseInt(kvp.value) || kvp.value === "0")
+        // 	query[kvp.key] = parseInt(kvp.value);
+        // else
+        query[kvp.key] = kvp.value;
+        return query;
+      }, {});
+  };
+  const queryParams = parseQueryString(window.location.search);
+
+  useEffect(() => {
+    console.log(queryParams);
+    if (queryParams.tag)
+      setImageUrl("/api/publication?search=" + queryParams.tag);
+    else setImageUrl("/api/publication");
+  }, []);
 
   function search(title) {
     if (title.length === 0) return "";
@@ -81,13 +103,13 @@ export const Search = (props) => {
     return title;
   }
 
-  function setSearch(e) {
-    if (e[0].label[0] === "#") {
-      console.log("tag", e[0], `/api/publication?search=${e[0].label.slice(1)}`);
-      setImageUrl(`/api/publication/?search=${e[0].label.slice(1)}`);
-    } else if (e[0].label[0] === "@") {
-        window.location.href = `/profile/${e[0].label.slice(1)}`;
-      console.log("user", e[0]);
+  function setSearch(label) {
+    if (label[0] === "#") {
+      console.log("tag", label, `/api/publication?search=${label.slice(1)}`);
+      setImageUrl(`/api/publication/?search=${label.slice(1)}`);
+    } else if (label[0] === "@") {
+      window.location.href = `/profile/${label.slice(1)}`;
+      console.log("user", label);
     } else {
       return;
     }
@@ -100,8 +122,8 @@ export const Search = (props) => {
           value={selectedOptions}
           onChange={(e) => {
             console.log(e);
-            setSearch(e);
-            // window.location.href = `/search/${e[0].label}`;
+            setSearch(e[0].label);
+            // window.location.href = `/search?tag=${e[0].label.slice(1)}`;
             setSelectedOptions([]);
           }}
           onInput={(e) => {
